@@ -13,8 +13,8 @@ public class SetupPlayer : NetworkBehaviour
     [SerializeField]
     private GameObject playerUIPrefab;
 
-
-    private GameObject playerUIInstance;
+   
+    public GameObject playerUIInstance;
 
     // Start is called before the first frame update
     void Start()
@@ -23,19 +23,23 @@ public class SetupPlayer : NetworkBehaviour
         {
             DisableComponents();
             AssignRemoteLayer();
+            Debug.Log("fsdfs");
         }
         else
         {
            //creation de UI du player
            playerUIInstance = Instantiate(playerUIPrefab);
            GetComponent<Player>().Setup();
-
         }
+
     }
     private void OnDisable()
-    {     
-        Destroy(playerUIInstance);
-        GameManager.instance.SetSceneCameraActive(true);
+    {
+       //Destroy(playerUIInstance);
+        if(isLocalPlayer)
+        {
+            GameManager.instance.SetSceneCameraActive(true);
+        }
         GameManager.UnregisterPlayer(gameObject.name);
     }
     public override void OnStartClient()

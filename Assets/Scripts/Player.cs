@@ -32,17 +32,22 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private GameObject deathEffect;
 
+    private bool firstSetup = true;
+
     public void Setup()
     {
+        if (isLocalPlayer)
+        {
+            // Changement de caméra
+            GameManager.instance.SetSceneCameraActive(false);
+            GetComponent<SetupPlayer>().playerUIInstance.SetActive(true);
+        }
 
-        GameManager.instance.SetSceneCameraActive(false);
-        GetComponent<SetupPlayer>().playerUIInstance.SetActive(true);
-
-        CmdBrodcastNewPlayerSetup();
+        CmdBroadcastNewPlayerSetup();
     }
 
-    [Command]
-    private void CmdBrodcastNewPlayerSetup()
+    [Command(requiresAuthority = false)]
+    private void CmdBroadcastNewPlayerSetup()
     {
         RpcSetUpPlayerOnAllClients();
     }
@@ -50,11 +55,15 @@ public class Player : NetworkBehaviour
     [ClientRpc]
     private void RpcSetUpPlayerOnAllClients()
     {
-        wasEnabledOnStart = new bool[disableOnDeath.Length];
-
-        for (int i = 0; i < disableOnDeath.Length; i++)
+        if (firstSetup)
         {
-            wasEnabledOnStart[i] = disableOnDeath[i].enabled;
+            wasEnabledOnStart = new bool[disableOnDeath.Length];
+
+            for (int i = 0; i < disableOnDeath.Length; i++)
+            {
+                wasEnabledOnStart[i] = disableOnDeath[i].enabled;
+            }
+            firstSetup = false;
         }
         SetDefaults();
     }
@@ -76,8 +85,7 @@ public class Player : NetworkBehaviour
         }
         //desactive la camera principal
 
-        GameObject spawnGFX = Instantiate(spawnEffect, transform.position, Quaternion.LookRotation(Vector3.up));
-        Destroy(spawnGFX, 3f);
+        
     }
 
     private void Update()
@@ -141,14 +149,15 @@ public class Player : NetworkBehaviour
     {
         yield return new WaitForSeconds(GameManager.instance.matchSettings.respawTimer);
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
         CharacterController con = GetComponent<CharacterController>();
         con.enabled = true;
+        GameObject spawnGFX = Instantiate(spawnEffect, transform.position, Quaternion.LookRotation(Vector3.up));
+        Destroy(spawnGFX, 3f);
+        yield return new WaitForSeconds(0.5f);
 
-        GameManager.instance.SetSceneCameraActive(false);
-        GetComponent<SetupPlayer>().playerUIInstance.SetActive(true);
-
-        SetDefaults();
+        Setup();
     }
 }
