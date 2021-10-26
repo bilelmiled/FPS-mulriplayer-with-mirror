@@ -1,0 +1,2 @@
+D:\Unity Projects\Nouveau dossier\FPS-multiplayer-master\obj\Debug\Mirror.Components.csproj.AssemblyReference.cache
+D:\Unity Projects\Nouveau dossier\FPS-multiplayer-master\obj\Debug\Mirror.Components.csproj.CoreCompileInputs.cache
