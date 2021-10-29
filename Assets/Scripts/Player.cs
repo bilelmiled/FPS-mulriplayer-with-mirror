@@ -18,6 +18,9 @@ public class Player : NetworkBehaviour
     [SyncVar]
     private float currentHealth;
 
+    public int kills;
+    public int deaths;
+
     [SerializeField]
     private Behaviour[] disableOnDeath;
 
@@ -96,11 +99,11 @@ public class Player : NetworkBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            RpcTakeDamage(200);
+            RpcTakeDamage(200,"vide");
         }
     }
     [ClientRpc]
-    public void RpcTakeDamage(float damage)
+    public void RpcTakeDamage(float damage,string sourceId)
     {
         if (isDead)
         {
@@ -110,12 +113,21 @@ public class Player : NetworkBehaviour
         Debug.Log(transform.name + " hp: " + currentHealth);
         if (currentHealth <= 0)
         {
-            Die();
+            Die(sourceId);
         }
     }
-    private void Die()
+    private void Die(string sourceId)
     {
+        Player sourcePlayer = GameManager.GetPlayer(sourceId);
+
+        if(sourcePlayer)
+        {
+            sourcePlayer.kills++;
+            GameManager.instance.onPlayerKilledCallback.Invoke(transform.name, sourcePlayer.name);
+        }
+
         isDead = true;
+        deaths++;
         //desactive les scripts des joueur
         for (int i = 0; i < disableOnDeath.Length; i++)
         {
@@ -152,12 +164,13 @@ public class Player : NetworkBehaviour
 
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
-        CharacterController con = GetComponent<CharacterController>();
-        con.enabled = true;
+        yield return new WaitForSeconds(0.5f);
         GameObject spawnGFX = Instantiate(spawnEffect, transform.position, Quaternion.LookRotation(Vector3.up));
         Destroy(spawnGFX, 3f);
+        CharacterController con = GetComponent<CharacterController>();
+        con.enabled = true;
+       
         yield return new WaitForSeconds(0.5f);
-
         Setup();
     }
 }

@@ -28,6 +28,11 @@ public class PlayerShoot : NetworkBehaviour
 
     private void Update()
     {
+        if(PauseMenu.isOn)
+        {
+            return;
+        }
+
         if (isLocalPlayer)
         {
             currentWeapon = weaponManager.GetCurrentWeapon();
@@ -96,20 +101,20 @@ public class PlayerShoot : NetworkBehaviour
         {
             if(hit.collider.tag == "Player")
             {
-                CmdPlayerShot(hit.collider.name, currentWeapon.damage);
+                CmdPlayerShot(hit.collider.name, currentWeapon.damage,transform.name);
             }
             CmdOnHit(hit.point,hit.normal);
         }
     }
 
     [Command]
-    private void CmdPlayerShot(string playerId,float damage)
+    private void CmdPlayerShot(string playerId,float damage,string sourceId)
     {
         Debug.Log(playerId + "a ete touche");
 
         Player player = GameManager.GetPlayer(playerId);
 
-        player.RpcTakeDamage(damage);
+        player.RpcTakeDamage(damage,sourceId);
 
     }
 }

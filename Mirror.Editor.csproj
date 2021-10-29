@@ -52,28 +52,39 @@
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2020.3.12f1</UnityVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll" />
+    <Analyzer Include="Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Mirror\Editor\Empty\ScriptableObjectUtility.cs" />
-    <Compile Include="Assets\Mirror\Editor\SyncVarAttributeDrawer.cs" />
-    <Compile Include="Assets\Mirror\Editor\NetworkInformationPreview.cs" />
-    <Compile Include="Assets\Mirror\Editor\EditorHelper.cs" />
-    <Compile Include="Assets\Mirror\Editor\Empty\Logging\LogLevelWindow.cs" />
-    <Compile Include="Assets\Mirror\Editor\EnterPlayModeSettingsCheck.cs" />
-    <Compile Include="Assets\Mirror\Editor\NetworkManagerEditor.cs" />
-    <Compile Include="Assets\Mirror\Editor\NetworkBehaviourInspector.cs" />
-    <Compile Include="Assets\Mirror\Editor\Empty\Logging\LogLevelsGUI.cs" />
-    <Compile Include="Assets\Mirror\Editor\SceneDrawer.cs" />
-    <Compile Include="Assets\Mirror\Editor\InspectorHelper.cs" />
-    <Compile Include="Assets\Mirror\Editor\Empty\Logging\NetworkLogSettingsEditor.cs" />
-    <Compile Include="Assets\Mirror\Editor\NetworkScenePostProcess.cs" />
-    <Compile Include="Assets\Mirror\Editor\Empty\LogLevelWindow.cs" />
-    <Compile Include="Assets\Mirror\Editor\Empty\Logging\LogSettingsEditor.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\Empty\ScriptableObjectUtility.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\SyncVarAttributeDrawer.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\NetworkInformationPreview.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\EditorHelper.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\Empty\Logging\LogLevelWindow.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\EnterPlayModeSettingsCheck.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\NetworkManagerEditor.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\NetworkBehaviourInspector.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\Empty\Logging\LogLevelsGUI.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\SceneDrawer.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\InspectorHelper.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\Empty\Logging\NetworkLogSettingsEditor.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\NetworkScenePostProcess.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\Empty\LogLevelWindow.cs" />
+    <Compile Include="Assets\Imports\Mirror\Editor\Empty\Logging\LogSettingsEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Mirror\Editor\Mirror.Editor.asmdef" />
+    <None Include="Assets\Imports\Mirror\Editor\Mirror.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -310,17 +321,8 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Editor\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.CecilX.Rocks">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX.Pdb">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.5.7\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll</HintPath>
     </Reference>
     <Reference Include="log4netPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.5.7\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
@@ -328,11 +330,20 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.CecilX.Mdb">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll</HintPath>
-    </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.5.7\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX">
+      <HintPath>Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Mdb">
+      <HintPath>Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Pdb">
+      <HintPath>Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Rocks">
+      <HintPath>Assets\Imports\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
