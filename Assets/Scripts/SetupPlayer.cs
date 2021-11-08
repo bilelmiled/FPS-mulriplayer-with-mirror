@@ -1,6 +1,6 @@
 using UnityEngine;
 using Mirror;
-
+using System;
 
 public class SetupPlayer : NetworkBehaviour
 {
@@ -23,16 +23,41 @@ public class SetupPlayer : NetworkBehaviour
         {
             DisableComponents();
             AssignRemoteLayer();
-            Debug.Log("fsdfs");
+
         }
         else
         {
-           //creation de UI du player
-           playerUIInstance = Instantiate(playerUIPrefab);
-           GetComponent<Player>().Setup();
+            //creation de UI du player
+            playerUIInstance = Instantiate(playerUIPrefab);
+
+            PlayerUI ui = playerUIInstance.GetComponent<PlayerUI>();
+            if(ui == null)
+            {
+                Debug.LogError("pas de UI");
+            }
+            else
+            {
+                ui.SetPlayer(GetComponent<Player>());
+            }
+
+            GetComponent<Player>().Setup();
+
+            CmdSetUsername(transform.name, UserAccountManager.loggedInUsername);
         }
 
     }
+
+    [Command]
+    private void CmdSetUsername(string playerID, string _username)
+    {
+        Player player = GameManager.GetPlayer(playerID);
+        if(player!=null)
+        {
+            Debug.Log("player: " + _username + " has joined !");
+        }
+        player.username = _username;
+    }
+
     private void OnDisable()
     {
        //Destroy(playerUIInstance);

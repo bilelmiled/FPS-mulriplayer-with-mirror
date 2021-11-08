@@ -1,12 +1,13 @@
 using UnityEngine;
 using Mirror;
+using System.Collections;
 
 public class WeaponManager : NetworkBehaviour
 {
     [SerializeField]
-    private PlayerWeapon primaryWeapon;
+    private WeaponData primaryWeapon;
 
-    private PlayerWeapon currentWeapon;
+    private WeaponData currentWeapon;
 
     private WeaponGraphics currentGraphics;
 
@@ -16,12 +17,17 @@ public class WeaponManager : NetworkBehaviour
     [SerializeField]
     private Transform weaponHolder;
 
+    [HideInInspector]
+    public int currentMagazineSize;
+
+    public bool isReloading = false;
+
     void Start()
     {
         EquipWeapon(primaryWeapon);
     }
 
-    public PlayerWeapon GetCurrentWeapon()
+    public WeaponData GetCurrentWeapon()
     {
         return currentWeapon;
     }
@@ -31,9 +37,10 @@ public class WeaponManager : NetworkBehaviour
         return currentGraphics;
     }
 
-    void EquipWeapon(PlayerWeapon _weapon)
+    public void EquipWeapon(WeaponData _weapon)
     {
         currentWeapon = _weapon;
+        currentMagazineSize = _weapon.magazineSize;
         GameObject weaponIns = Instantiate(_weapon.graphics, weaponHolder.position, weaponHolder.rotation);
         weaponIns.transform.SetParent(weaponHolder);
 
@@ -50,5 +57,39 @@ public class WeaponManager : NetworkBehaviour
         }
     }
 
-    
+    public IEnumerator Reload()
+    {
+        if(isReloading)
+        {
+            yield break;
+        }
+
+        Debug.Log("reloading");
+
+        isReloading = true;
+        CmdOnReload();
+        yield return new WaitForSeconds(currentWeapon.timeToReload);
+        currentMagazineSize = currentWeapon.magazineSize;
+
+        isReloading = false;
+        Debug.Log("reloading done ");
+    }
+
+    [Command]
+    void CmdOnReload()
+    {
+        RpcOnReload();
+    }
+
+    [ClientRpc]
+    void RpcOnReload()
+    {
+        Animator animator = currentGraphics.GetComponent<Animator>();
+        if(animator != null)
+        {
+            animator.SetTrigger("Reload");
+        }
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(currentWeapon.reloadSound);
+    }
 }

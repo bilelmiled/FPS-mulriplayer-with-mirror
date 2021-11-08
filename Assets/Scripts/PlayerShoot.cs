@@ -5,7 +5,7 @@ using System;
 
 public class PlayerShoot : NetworkBehaviour
 {
-    private PlayerWeapon currentWeapon;
+    private WeaponData currentWeapon;
 
     [SerializeField]
     private LayerMask mask;
@@ -28,14 +28,15 @@ public class PlayerShoot : NetworkBehaviour
 
     private void Update()
     {
-        if(PauseMenu.isOn)
+        currentWeapon = weaponManager.GetCurrentWeapon();
+
+        if (PauseMenu.isOn)
         {
             return;
         }
 
         if (isLocalPlayer)
         {
-            currentWeapon = weaponManager.GetCurrentWeapon();
 
             if (currentWeapon.fireRate <= 0f)
             {
@@ -54,6 +55,12 @@ public class PlayerShoot : NetworkBehaviour
                 {
                     CancelInvoke("Shoot");
                 }
+            }
+
+            if(Input.GetKeyDown(KeyCode.R) && currentWeapon.magazineSize > weaponManager.currentMagazineSize)
+            {
+                StartCoroutine(weaponManager.Reload());
+                return;
             }
         }
     }
@@ -83,16 +90,27 @@ public class PlayerShoot : NetworkBehaviour
     void RpcDoShooteEffect()
     {
         weaponManager.GetCurrentGraphics().muzzleFlash.Play();
+
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(currentWeapon.shootSound);
     }
 
     [Client]
     private void Shoot()
     {
-        if(!isLocalPlayer)
+        if(!isLocalPlayer || weaponManager.isReloading)
         {
             return;
         }
 
+        if(weaponManager.currentMagazineSize <= 0)
+        {
+            
+            StartCoroutine(weaponManager.Reload());
+            return;
+        }
+        Debug.Log(weaponManager.currentMagazineSize);
+        weaponManager.currentMagazineSize--;
         CmdOnShoot();
 
         RaycastHit hit;
@@ -104,6 +122,12 @@ public class PlayerShoot : NetworkBehaviour
                 CmdPlayerShot(hit.collider.name, currentWeapon.damage,transform.name);
             }
             CmdOnHit(hit.point,hit.normal);
+        }
+        if (weaponManager.currentMagazineSize <= 0)
+        {
+
+            StartCoroutine(weaponManager.Reload());
+            return;
         }
     }
 

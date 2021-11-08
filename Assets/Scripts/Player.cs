@@ -18,6 +18,14 @@ public class Player : NetworkBehaviour
     [SyncVar]
     private float currentHealth;
 
+    public float GetHealthPct()
+    {
+        return (float)currentHealth / maxHealth;
+    }
+
+    [SyncVar]
+    public string username ;
+
     public int kills;
     public int deaths;
 
@@ -99,7 +107,7 @@ public class Player : NetworkBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            RpcTakeDamage(200,"vide");
+            RpcTakeDamage(20,"vide");
         }
     }
     [ClientRpc]
@@ -123,7 +131,7 @@ public class Player : NetworkBehaviour
         if(sourcePlayer)
         {
             sourcePlayer.kills++;
-            GameManager.instance.onPlayerKilledCallback.Invoke(transform.name, sourcePlayer.name);
+            GameManager.instance.onPlayerKilledCallback.Invoke(username, sourcePlayer.username);
         }
 
         isDead = true;

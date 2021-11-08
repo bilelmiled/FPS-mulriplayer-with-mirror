@@ -15,7 +15,7 @@ public class PlayerItem : MonoBehaviour
 
     public void setup(Player player)
     {
-        usernameText.text = player.name;
+        usernameText.text = player.username;
         killsText.text = "Kills : " + player.kills;
         deathsKills.text = "deaths : " + player.deaths;
     }
